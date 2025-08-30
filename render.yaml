@@ -1,16 +1,14 @@
 services:
-  # Backend Service
   - type: web
-    name: voice-shopping-backend
+    name: voice-shopping-assistant
     env: python
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      # Build React frontend
+      cd ../frontend
+      npm install
+      npm run build
+      cd ../backend
+      # Install Python dependencies
+      pip install -r requirements.txt
     startCommand: gunicorn app:app -b 0.0.0.0:$PORT --workers 2
-
-  # Frontend Service
-  - type: web
-    name: voice-shopping-frontend
-    env: node
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    startCommand: serve -s build -l $PORT
